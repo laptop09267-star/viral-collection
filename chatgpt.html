@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VIRAL Collection — premium garments, clean design, fast ordering.">
+  <title>VIRAL Collection — Premium Garments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#101010; --muted:#6f6f6f; --paper:#f8f8f6; --line:rgba(16,16,16,.12);
+      --white:#fff; --shadow:0 22px 60px rgba(0,0,0,.10); --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; color:var(--ink); background:var(--paper);
+      font-family:"DM Sans",system-ui,sans-serif; overflow-x:hidden;
+      background-image:linear-gradient(rgba(255,255,255,.84),rgba(255,255,255,.84)),url("./assets/paper-bg.png");
+      background-attachment:fixed; background-size:cover;
+    }
+    body.lock{overflow:hidden}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    .container{width:min(1180px,92%);margin:auto}
+    .eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:#777}
+    .serif{font-family:"Playfair Display",serif}
+    .hidden{display:none!important}
+
+    /* Loader */
+    #loader{
+      position:fixed;inset:0;z-index:9999;background:#fff;display:grid;place-items:center;
+      transition:opacity .6s ease,visibility .6s ease;
+    }
+    #loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-inner{text-align:center;width:min(420px,82%)}
+    .loader-logo{font-size:clamp(2.2rem,7vw,4.6rem);letter-spacing:.13em;font-weight:700}
+    .loader-sub{margin:10px 0 28px;color:#777;letter-spacing:.16em;text-transform:uppercase;font-size:.68rem}
+    .loader-track{height:3px;background:#ececec;overflow:hidden}
+    .loader-bar{height:100%;width:0;background:#111;animation:load 4.5s cubic-bezier(.22,1,.36,1) forwards}
+    @keyframes load{to{width:100%}}
+
+    /* Nav */
+    .nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.72);
+      backdrop-filter:blur(18px);border-bottom:1px solid rgba(0,0,0,.07);
+    }
+    .nav-inner{height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{font-weight:800;letter-spacing:.16em;font-size:1rem}
+    .nav-links{display:flex;gap:26px;align-items:center;font-size:.86rem}
+    .nav-links a{position:relative}
+    .nav-links a:after{content:"";position:absolute;left:0;bottom:-7px;width:0;height:1px;background:#111;transition:.3s}
+    .nav-links a:hover:after{width:100%}
+    .nav-actions{display:flex;gap:9px;align-items:center}
+    .icon-btn,.menu-btn{
+      width:43px;height:43px;border:1px solid var(--line);border-radius:50%;background:#fff;display:grid;place-items:center;
+      transition:.3s;position:relative
+    }
+    .icon-btn:hover,.menu-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,0,0,.08)}
+    .cart-count{position:absolute;right:-2px;top:-3px;background:#111;color:#fff;width:18px;height:18px;border-radius:50%;font-size:.62rem;display:grid;place-items:center}
+    .menu-btn{display:none}
+
+    /* Hero */
+    main{padding-top:78px}
+    .hero{min-height:720px;display:grid;place-items:center;position:relative;overflow:hidden}
+    .hero:before,.hero:after{content:"";position:absolute;border:1px solid rgba(0,0,0,.1);border-radius:50%;pointer-events:none}
+    .hero:before{width:600px;height:600px;right:-180px;top:40px;animation:spin 22s linear infinite}
+    .hero:after{width:400px;height:400px;left:-180px;bottom:-180px;animation:spin 30s linear infinite reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:50px;position:relative;z-index:2}
+    .hero-copy{animation:rise .9s .15s both}
+    @keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+    .hero h1{font-size:clamp(4rem,10vw,8.5rem);line-height:.82;margin:15px 0 24px;letter-spacing:-.07em}
+    .hero p{max-width:540px;color:#5e5e5e;line-height:1.8;font-size:1rem}
+    .hero-buttons{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+    .btn{
+      border:1px solid #111;background:#111;color:#fff;padding:14px 20px;border-radius:999px;
+      font-weight:700;font-size:.82rem;transition:.3s;display:inline-flex;align-items:center;justify-content:center;gap:8px
+    }
+    .btn:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,0,0,.15)}
+    .btn.light{background:#fff;color:#111;border-color:var(--line)}
+    .btn.full{width:100%}
+    .hero-card{min-height:520px;border-radius:38px;background:#111;position:relative;overflow:hidden;box-shadow:var(--shadow);animation:float 6s ease-in-out infinite}
+    @keyframes float{50%{transform:translateY(-10px) rotate(.4deg)}}
+    .hero-card:before{
+      content:"V";position:absolute;inset:-20px;font-size:33rem;line-height:1;font-family:"Playfair Display",serif;
+      color:#fff;opacity:.06;display:grid;place-items:center
+    }
+    .hero-product{
+      position:absolute;left:12%;right:12%;top:12%;bottom:12%;border:1px solid rgba(255,255,255,.15);
+      border-radius:28px;display:flex;flex-direction:column;justify-content:space-between;padding:28px;color:#fff
+    }
+    .hero-product .tag{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;opacity:.65}
+    .garment-art{flex:1;display:grid;place-items:center;position:relative}
+    .shirt{
+      width:210px;height:250px;background:#fff;border-radius:35px 35px 24px 24px;position:relative;
+      box-shadow:20px 25px 0 rgba(255,255,255,.08);transform:rotate(-5deg)
+    }
+    .shirt:before,.shirt:after{content:"";position:absolute;background:#fff;top:10px;width:82px;height:125px}
+    .shirt:before{left:-56px;transform:rotate(30deg);border-radius:35px}
+    .shirt:after{right:-56px;transform:rotate(-30deg);border-radius:35px}
+    .shirt .seam{position:absolute;left:50%;top:0;height:100%;width:1px;background:#ddd}
+    .hero-product h3{font-size:2rem;margin:0}
+    .hero-product small{opacity:.65}
+
+    /* Sections */
+    section{padding:110px 0;position:relative}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:42px}
+    .section-head h2{font-size:clamp(2.6rem,6vw,5rem);line-height:.9;letter-spacing:-.06em;margin:10px 0 0}
+    .section-head p{max-width:430px;color:#666;line-height:1.7}
+
+    /* Collection */
+    .collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .product-card{
+      background:rgba(255,255,255,.84);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+      box-shadow:0 8px 30px rgba(0,0,0,.04);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;
+      opacity:0;transform:translateY(25px)
+    }
+    .product-card.reveal{opacity:1;transform:none}
+    .product-card:hover{transform:translateY(-10px);box-shadow:var(--shadow)}
+    .product-visual{height:330px;background:linear-gradient(135deg,#f0f0ee,#d9d9d5);position:relative;display:grid;place-items:center;overflow:hidden}
+    .product-visual:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(0,0,0,.1);animation:spin 16s linear infinite}
+    .mini-garment{width:135px;height:170px;background:#111;border-radius:25px 25px 15px 15px;position:relative;z-index:1;box-shadow:15px 20px 0 rgba(0,0,0,.08)}
+    .mini-garment:before,.mini-garment:after{content:"";position:absolute;background:#111;top:8px;width:55px;height:90px}
+    .mini-garment:before{left:-40px;transform:rotate(30deg);border-radius:25px}
+    .mini-garment:after{right:-40px;transform:rotate(-30deg);border-radius:25px}
+    .tone-2{background:#d9d9d4}.tone-2:before,.tone-2:after{background:#d9d9d4}
+    .tone-3{background:#fff;border:1px solid #ddd}.tone-3:before,.tone-3:after{background:#fff;border:1px solid #ddd}
+    .tone-4{background:#777}.tone-4:before,.tone-4:after{background:#777}
+    .product-number{position:absolute;top:18px;left:18px;background:rgba(255,255,255,.75);backdrop-filter:blur(8px);border-radius:999px;padding:7px 10px;font-size:.68rem;z-index:2}
+    .product-body{padding:20px}
+    .product-body h3{margin:5px 0 8px;font-size:1.15rem}
+    .product-body .price{font-weight:700;margin-bottom:17px}
+    .card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .card-actions .btn:first-child{grid-column:1/-1}
+    .btn.small{padding:11px 12px;font-size:.73rem}
+
+    /* Story / marquee */
+    .marquee{border-block:1px solid var(--line);overflow:hidden;padding:18px 0;background:rgba(255,255,255,.45)}
+    .marquee-track{display:flex;width:max-content;animation:marquee 24s linear infinite}
+    .marquee span{font-family:"Playfair Display",serif;font-size:2rem;padding:0 28px;white-space:nowrap}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+
+    /* How to order */
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+    .step{min-height:220px;padding:24px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.68);position:relative;overflow:hidden}
+    .step-num{font-size:4rem;font-family:"Playfair Display",serif;opacity:.12;position:absolute;right:15px;top:0}
+    .step h3{margin-top:55px}
+    .step p{color:#6b6b6b;line-height:1.7;font-size:.9rem}
+
+    /* FAQ */
+    .faq{max-width:900px;margin:auto}
+    .faq-item{border-top:1px solid var(--line)}
+    .faq-item:last-child{border-bottom:1px solid var(--line)}
+    .faq-q{width:100%;background:none;border:0;text-align:left;padding:23px 0;display:flex;justify-content:space-between;font-weight:700}
+    .faq-a{max-height:0;overflow:hidden;color:#666;line-height:1.7;transition:max-height .45s ease,padding .45s}
+    .faq-item.open .faq-a{max-height:160px;padding:0 0 23px}
+    .plus{transition:.3s;font-size:1.4rem}.faq-item.open .plus{transform:rotate(45deg)}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:30px;align-items:start}
+    .contact-panel{background:#111;color:#fff;border-radius:30px;padding:35px;min-height:420px}
+    .contact-panel h2{font-size:3.2rem;line-height:1;margin:20px 0}
+    .contact-panel p{color:#bbb;line-height:1.8}
+    .contact-info{margin-top:55px;display:grid;gap:16px;color:#ddd}
+    .form-panel{background:rgba(255,255,255,.75);border:1px solid var(--line);border-radius:30px;padding:30px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+    label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:7px}
+    .field{margin-bottom:15px}
+    input,textarea,select{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px 14px;outline:none;transition:.25s}
+    input:focus,textarea:focus,select:focus{border-color:#111;box-shadow:0 0 0 4px rgba(0,0,0,.04)}
+    textarea{min-height:130px;resize:vertical}
+
+    /* Footer */
+    footer{padding:35px 0;border-top:1px solid var(--line)}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;color:#777;font-size:.8rem}
+
+    /* App views / modal-like pages */
+    .view{
+      position:fixed;inset:0;z-index:2000;background:rgba(248,248,246,.97);backdrop-filter:blur(18px);
+      overflow:auto;opacity:0;visibility:hidden;transform:translateY(20px);transition:.35s
+    }
+    .view.active{opacity:1;visibility:visible;transform:none}
+    .view-top{position:sticky;top:0;z-index:5;padding:18px 0;background:rgba(248,248,246,.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+    .view-top-inner{display:flex;align-items:center;justify-content:space-between}
+    .back-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 15px}
+    .detail-wrap{min-height:calc(100vh - 80px);display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;padding:60px 0}
+    .detail-image{min-height:600px;border-radius:35px;background:linear-gradient(135deg,#ededeb,#d8d8d4);display:grid;place-items:center;position:relative;overflow:hidden}
+    .detail-image .mini-garment{transform:scale(1.8) rotate(-5deg)}
+    .detail-copy .eyebrow{margin-bottom:15px}
+    .detail-copy h1{font-size:clamp(3rem,6vw,6rem);line-height:.9;letter-spacing:-.06em;margin:0 0 20px}
+    .detail-copy .price{font-size:1.3rem;font-weight:700;margin:20px 0}
+    .detail-copy p{color:#666;line-height:1.8;max-width:520px}
+    .detail-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+    .detail-list div{border-top:1px solid var(--line);padding-top:10px;color:#666;font-size:.84rem}
+    .detail-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* Cart */
+    .cart-panel{max-width:850px;margin:0 auto;padding:60px 0 100px}
+    .cart-panel h1,.checkout-wrap h1,.history-wrap h1{font-size:clamp(3rem,7vw,6rem);line-height:.9;letter-spacing:-.06em;margin:20px 0 40px}
+    .cart-item{display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+    .cart-thumb{height:100px;border-radius:18px;background:linear-gradient(135deg,#eee,#d9d9d4);display:grid;place-items:center}
+    .cart-thumb .mini-garment{transform:scale(.42)}
+    .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+    .qty button{border:0;background:#fff;width:32px;height:32px}.qty span{min-width:28px;text-align:center;font-size:.82rem}
+    .cart-total{display:flex;justify-content:space-between;padding:25px 0;font-size:1.1rem;font-weight:700}
+    .empty{padding:60px 0;text-align:center;color:#777}
+
+    /* Checkout/history */
+    .checkout-wrap,.history-wrap{width:min(850px,92%);margin:auto;padding:60px 0 100px}
+    .checkout-card{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:30px;padding:30px}
+    .success-box{text-align:center;padding:80px 20px}
+    .success-tick{width:92px;height:92px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:3rem;margin:0 auto 25px;animation:pop .6s both}
+    @keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+    .history-card{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:25px;padding:22px;margin-bottom:14px}
+    .history-top{display:flex;justify-content:space-between;gap:20px;align-items:start}
+    .status{font-size:.72rem;font-weight:700;border:1px solid var(--line);padding:8px 10px;border-radius:999px;white-space:nowrap}
+    .timeline{display:flex;gap:7px;margin-top:18px}
+    .timeline i{height:5px;flex:1;background:#ddd;border-radius:10px}.timeline i.active{background:#111}
+    .history-meta{color:#777;font-size:.82rem;margin-top:8px}
+    .notice{padding:13px 15px;border-radius:13px;background:#f1f1ef;color:#666;font-size:.82rem;line-height:1.6;margin-bottom:15px}
+
+    /* Toast */
+    #toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,30px);background:#111;color:#fff;border-radius:999px;padding:13px 20px;font-size:.8rem;opacity:0;pointer-events:none;transition:.35s;z-index:9998}
+    #toast.show{opacity:1;transform:translate(-50%,0)}
+
+    @media(max-width:900px){
+      .nav-links{display:none}.menu-btn{display:grid}
+      .nav-inner{height:68px}.nav{height:68px}main{padding-top:68px}
+      .hero{min-height:auto;padding:75px 0}.hero-grid{grid-template-columns:1fr}.hero-card{min-height:430px}
+      .collection-grid{grid-template-columns:repeat(2,1fr)}
+      .steps{grid-template-columns:repeat(2,1fr)}
+      .contact-grid,.detail-wrap{grid-template-columns:1fr}
+      .detail-image{min-height:420px}
+    }
+    @media(max-width:560px){
+      section{padding:75px 0}.hero h1{font-size:4.2rem}.hero-card{min-height:390px}
+      .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      .product-visual{height:220px}.mini-garment{transform:scale(.72)}
+      .product-body{padding:13px}.product-body h3{font-size:.95rem}.product-body .price{font-size:.85rem}
+      .card-actions{grid-template-columns:1fr}.card-actions .btn:first-child{grid-column:auto}
+      .steps{grid-template-columns:1fr}.section-head{display:block}
+      .form-grid{grid-template-columns:1fr}.contact-grid{gap:15px}
+      .contact-panel{min-height:auto}.footer-inner{display:block}.footer-inner div+div{margin-top:10px}
+      .cart-item{grid-template-columns:70px 1fr}.cart-item>.item-price{grid-column:2}.qty{justify-self:start}
+      .detail-actions .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">VIRAL</div>
+      <div class="loader-sub">Collection / Premium Garments</div>
+      <div class="loader-track"><div class="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" onclick="goHome()">VIRAL COLLECTION</a>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#collection">Collection</a>
+        <a href="#how-to-order">How to Order</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+        <a href="#" onclick="openHistory(event)">Orders History</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" aria-label="Orders history" onclick="openHistory(event)">↗</button>
+        <button class="icon-btn" aria-label="Cart" onclick="openCart()">🛒<span id="cartCount" class="cart-count">0</span></button>
+        <button class="menu-btn" aria-label="Menu" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden" style="background:#fff;border-top:1px solid var(--line);padding:15px">
+      <div class="container" style="display:grid;gap:13px;font-size:.9rem">
+        <a href="#home" onclick="toggleMobileMenu()">Home</a>
+        <a href="#collection" onclick="toggleMobileMenu()">Collection</a>
+        <a href="#how-to-order" onclick="toggleMobileMenu()">How to Order</a>
+        <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
+        <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+        <a href="#" onclick="openHistory(event);toggleMobileMenu()">Orders History</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">New season / 2026</div>
+          <h1 class="serif">Wear<br><em>Viral.</em></h1>
+          <p>Clean silhouettes, premium everyday pieces and a shopping experience built to feel as refined as the collection itself.</p>
+          <div class="hero-buttons">
+            <a class="btn" href="#collection">Explore Collection ↘</a>
+            <a class="btn light" href="#how-to-order">How to Order</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-product">
+            <div class="tag">VIRAL / 001</div>
+            <div class="garment-art"><div class="shirt"><div class="seam"></div></div></div>
+            <div>
+              <h3 class="serif">Quiet luxury.</h3>
+              <small>Made for the everyday.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee"><div class="marquee-track">
+      <span>VIRAL COLLECTION</span><span>ESSENTIALS / 2026</span><span>VIRAL COLLECTION</span><span>ESSENTIALS / 2026</span>
+      <span>VIRAL COLLECTION</span><span>ESSENTIALS / 2026</span><span>VIRAL COLLECTION</span><span>ESSENTIALS / 2026</span>
+    </div></div>
+
+    <section id="collection">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="eyebrow">01 / The collection</div><h2 class="serif">Four pieces.<br>One identity.</h2></div>
+          <p>Tap any piece to open its full product page. Every card includes details, direct purchase and cart actions.</p>
+        </div>
+        <div id="collectionGrid" class="collection-grid"></div>
+      </div>
+    </section>
+
+    <section id="how-to-order">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="eyebrow">02 / Simple checkout</div><h2 class="serif">How to<br>order.</h2></div>
+          <p>Choose a product, add it to your trolley or buy it directly, enter your delivery details, and place the order.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="step-num">01</span><div class="eyebrow">Select</div><h3>Pick your piece</h3><p>Open a product to see its full description, price and garment information.</p></div>
+          <div class="step"><span class="step-num">02</span><div class="eyebrow">Trolley</div><h3>Add to cart</h3><p>Use + and − to adjust quantities before proceeding to checkout.</p></div>
+          <div class="step"><span class="step-num">03</span><div class="eyebrow">Details</div><h3>Enter delivery info</h3><p>Provide your name, city, phone number and full delivery address.</p></div>
+          <div class="step"><span class="step-num">04</span><div class="eyebrow">Done</div><h3>Place your order</h3><p>Your order is saved in Orders History with a delivery-progress timeline.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="eyebrow">03 / Questions</div><h2 class="serif">FAQ.</h2></div>
+        </div>
+        <div class="faq">
+          <div class="faq-item"><button class="faq-q">How long does delivery take?<span class="plus">+</span></button><div class="faq-a">The order history starts with a 6–7 day delivery message and updates every 24 hours as the order gets closer.</div></div>
+          <div class="faq-item"><button class="faq-q">Can I change the quantity in my trolley?<span class="plus">+</span></button><div class="faq-a">Yes. Open the trolley and use + or − beside each product before checkout.</div></div>
+          <div class="faq-item"><button class="faq-q">Where can I see my orders?<span class="plus">+</span></button><div class="faq-a">Use the Orders History button in the navigation. Orders are stored in your browser using localStorage.</div></div>
+          <div class="faq-item"><button class="faq-q">How will my order details reach the store?<span class="plus">+</span></button><div class="faq-a">The included Formspree integration submits order details to your configured Formspree endpoint. Replace the placeholder endpoint in the JavaScript with your real Formspree form URL.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container contact-grid">
+        <div class="contact-panel">
+          <div class="eyebrow" style="color:#aaa">04 / Contact</div>
+          <h2 class="serif">Let's talk<br>garments.</h2>
+          <p>For wholesale, sizing questions, collaborations or general enquiries, send a message through the form.</p>
+          <div class="contact-info">
+            <div>✉ hello@viralcollection.example</div>
+            <div>◷ Mon — Sat / 10:00 — 20:00</div>
+            <div>⌁ Pakistan / Online Store</div>
+          </div>
+        </div>
+        <div class="form-panel">
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="field"><label>Name</label><input name="name" required></div>
+              <div class="field"><label>Email</label><input name="email" type="email" required></div>
+            </div>
+            <div class="field"><label>Subject</label><input name="subject" required></div>
+            <div class="field"><label>Message</label><textarea name="message" required></textarea></div>
+            <button class="btn full" type="submit">Send Message →</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="container footer-inner"><div>© 2026 VIRAL Collection</div><div>Premium garments / Built for the next look.</div></div></footer>
+
+  <!-- Product Details View -->
+  <div id="productView" class="view">
+    <div class="view-top"><div class="container view-top-inner"><button class="back-btn" onclick="closeView()">← Back</button><button class="icon-btn" onclick="openCart()">🛒<span class="cart-count" id="cartCount2">0</span></button></div></div>
+    <div class="container detail-wrap" id="productDetail"></div>
+  </div>
+
+  <!-- Cart View -->
+  <div id="cartView" class="view">
+    <div class="view-top"><div class="container view-top-inner"><button class="back-btn" onclick="closeView()">← Back</button><div class="eyebrow">Your Trolley</div></div></div>
+    <div class="cart-panel">
+      <div class="eyebrow">Shopping bag</div><h1 class="serif">Your trolley.</h1>
+      <div id="cartItems"></div>
+      <div id="cartFooter"></div>
+    </div>
+  </div>
+
+  <!-- Checkout View -->
+  <div id="checkoutView" class="view">
+    <div class="view-top"><div class="container view-top-inner"><button class="back-btn" onclick="openCart()">← Trolley</button><div class="eyebrow">Checkout</div></div></div>
+    <div class="checkout-wrap">
+      <div class="eyebrow">Delivery details</div><h1 class="serif">Place order.</h1>
+      <div class="checkout-card" id="checkoutContent"></div>
+    </div>
+  </div>
+
+  <!-- History View -->
+  <div id="historyView" class="view">
+    <div class="view-top"><div class="container view-top-inner"><button class="back-btn" onclick="closeView()">← Back</button><div class="eyebrow">Order History</div></div></div>
+    <div class="history-wrap">
+      <div class="eyebrow">Your orders</div><h1 class="serif">Order history.</h1>
+      <div id="historyContent"></div>
+    </div>
+  </div>
+
+  <!-- Buy Now success / order form view is reused in checkout -->
+  <div id="toast"></div>
+
+  <script>
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+    const STORAGE_CART = "viral_cart_v1";
+    const STORAGE_ORDERS = "viral_orders_v1";
+
+    const products = [
+      {id:"viral-001",name:"Signature Overshirt",price:4499,tag:"VIRAL / 001",tone:"tone-1",desc:"A structured everyday overshirt with a clean silhouette, designed to layer over your daily rotation.",fabric:"Premium cotton blend",fit:"Relaxed fit",color:"Obsidian",sizes:"S / M / L / XL"},
+      {id:"viral-002",name:"Urban Co-ord",price:5299,tag:"VIRAL / 002",tone:"tone-2",desc:"A modern two-piece co-ord made for effortless street styling and comfortable all-day wear.",fabric:"Soft textured blend",fit:"Regular fit",color:"Stone",sizes:"S / M / L / XL"},
+      {id:"viral-003",name:"Essential Tee",price:2499,tag:"VIRAL / 003",tone:"tone-3",desc:"A minimal heavyweight tee with a crisp finish — simple enough for every day, distinct enough for VIRAL.",fabric:"Heavyweight cotton",fit:"Boxy fit",color:"Cloud",sizes:"S / M / L / XL"},
+      {id:"viral-004",name:"Luxe Hoodie",price:4999,tag:"VIRAL / 004",tone:"tone-4",desc:"A premium-feel hoodie with a clean front and soft interior, built for cooler days and relaxed styling.",fabric:"Fleece cotton blend",fit:"Oversized fit",color:"Graphite",sizes:"S / M / L / XL"}
+    ];
+
+    let cart = JSON.parse(localStorage.getItem(STORAGE_CART) || "[]");
+    let orders = JSON.parse(localStorage.getItem(STORAGE_ORDERS) || "[]");
+    let activeProduct = null;
+
+    function money(n){ return "PKR " + Number(n).toLocaleString("en-PK"); }
+    function save(){ localStorage.setItem(STORAGE_CART, JSON.stringify(cart)); localStorage.setItem(STORAGE_ORDERS, JSON.stringify(orders)); updateCartCount(); }
+    function getProduct(id){ return products.find(p=>p.id===id); }
+
+    function garmentHTML(tone="tone-1", small=false){
+      return `<div class="${small?'mini-garment':'shirt'} ${tone}">${small?'':'<div class="seam"></div>'}</div>`;
+    }
+
+    function renderProducts(){
+      const grid=document.getElementById("collectionGrid");
+      grid.innerHTML=products.map((p,i)=>`
+        <article class="product-card" data-index="${i}">
+          <div class="product-visual">
+            <span class="product-number">${String(i+1).padStart(2,"0")}</span>
+            ${garmentHTML(p.tone,true)}
+          </div>
+          <div class="product-body">
+            <div class="eyebrow">${p.tag}</div>
+            <h3>${p.name}</h3>
+            <div class="price">${money(p.price)}</div>
+            <div class="card-actions">
+              <button class="btn small light" onclick="openProduct('${p.id}')">See Details</button>
+              <button class="btn small" onclick="buyNow('${p.id}')">Buy Now</button>
+              <button class="btn small light" onclick="addToCart('${p.id}')">Add to Cart</button>
+            </div>
+          </div>
+        </article>`).join("");
+
+      setTimeout(()=>{
+        document.querySelectorAll(".product-card").forEach((el,i)=>setTimeout(()=>el.classList.add("reveal"),i*100));
+      },150);
+    }
+
+    function updateCartCount(){
+      const count=cart.reduce((a,b)=>a+b.qty,0);
+      document.getElementById("cartCount").textContent=count;
+      document.getElementById("cartCount2").textContent=count;
+    }
+
+    function addToCart(id,qty=1){
+      const item=cart.find(x=>x.id===id);
+      if(item) item.qty+=qty; else cart.push({id,qty});
+      save(); showToast("Added to your trolley.");
+    }
+
+    function changeQty(id,delta){
+      const item=cart.find(x=>x.id===id);
+      if(!item)return;
+      item.qty+=delta;
+      if(item.qty<=0) cart=cart.filter(x=>x.id!==id);
+      save(); renderCart();
+    }
+
+    function openProduct(id){
+      activeProduct=getProduct(id);
+      const p=activeProduct;
+      document.getElementById("productDetail").innerHTML=`
+        <div class="detail-image">${garmentHTML(p.tone,true)}</div>
+        <div class="detail-copy">
+          <div class="eyebrow">${p.tag}</div>
+          <h1 class="serif">${p.name}</h1>
+          <div class="price">${money(p.price)}</div>
+          <p>${p.desc}</p>
+          <div class="detail-list">
+            <div><strong>Fabric</strong><br>${p.fabric}</div>
+            <div><strong>Fit</strong><br>${p.fit}</div>
+            <div><strong>Color</strong><br>${p.color}</div>
+            <div><strong>Sizes</strong><br>${p.sizes}</div>
+          </div>
+          <div class="detail-actions">
+            <button class="btn" onclick="buyNow('${p.id}')">Buy Now →</button>
+            <button class="btn light" onclick="addToCart('${p.id}');openCart()">Add to Cart</button>
+          </div>
+        </div>`;
+      openView("productView");
+    }
+
+    function buyNow(id){
+      activeProduct=getProduct(id);
+      openCheckout([{id,qty:1}], true);
+    }
+
+    function openView(id){
+      document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      document.body.classList.add("lock");
+    }
+    function closeView(){
+      document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+      document.body.classList.remove("lock");
+    }
+
+    function openCart(){
+      renderCart(); openView("cartView");
+    }
+
+    function renderCart(){
+      const itemsEl=document.getElementById("cartItems"), footer=document.getElementById("cartFooter");
+      if(!cart.length){
+        itemsEl.innerHTML=`<div class="empty">Your trolley is empty.<br><br><a class="btn" href="#collection" onclick="closeView()">Explore Collection</a></div>`;
+        footer.innerHTML=""; return;
+      }
+      let total=0;
+      itemsEl.innerHTML=cart.map(item=>{
+        const p=getProduct(item.id); const sub=p.price*item.qty; total+=sub;
+        return `<div class="cart-item">
+          <div class="cart-thumb">${garmentHTML(p.tone,true)}</div>
+          <div><div class="eyebrow">${p.tag}</div><strong>${p.name}</strong><div class="history-meta">${money(p.price)} each</div></div>
+          <div><div class="qty"><button onclick="changeQty('${p.id}',-1)">−</button><span>${item.qty}</span><button onclick="changeQty('${p.id}',1)">+</button></div><div class="item-price" style="text-align:right;margin-top:8px;font-weight:700">${money(sub)}</div></div>
+        </div>`;
+      }).join("");
+      footer.innerHTML=`<div class="cart-total"><span>Total</span><span>${money(total)}</span></div><button class="btn full" onclick="openCheckout(cart,false)">Proceed to Checkout →</button>`;
+    }
+
+    function openCheckout(items,isDirect){
+      if(!items.length){showToast("Your trolley is empty.");return;}
+      const summary=items.map(item=>{const p=getProduct(item.id);return `${p.name} × ${item.qty} — ${money(p.price*item.qty)}`}).join("\\n");
+      const total=items.reduce((sum,item)=>sum+getProduct(item.id).price*item.qty,0);
+      document.getElementById("checkoutContent").innerHTML=`
+        <div class="notice"><strong>Order summary</strong><br>${summary.replaceAll("\\n","<br>")}<br><br><strong>Total: ${money(total)}</strong></div>
+        <form id="orderForm">
+          <input type="hidden" name="products" value="${items.map(x=>getProduct(x.id).name+' x '+x.qty).join(', ')}">
+          <input type="hidden" name="total" value="${money(total)}">
+          <input type="hidden" name="order_type" value="${isDirect?'Buy Now':'Cart Checkout'}">
+          <div class="form-grid">
+            <div class="field"><label>Name</label><input name="name" required></div>
+            <div class="field"><label>City</label><input name="city" required></div>
+          </div>
+          <div class="field"><label>Phone No.</label><input name="phone" type="tel" required></div>
+          <div class="field"><label>Full Address</label><textarea name="address" required></textarea></div>
+          <button class="btn full" type="submit">Place Order →</button>
+        </form>`;
+      document.getElementById("orderForm").addEventListener("submit",e=>submitOrder(e,items,isDirect));
+      openView("checkoutView");
+    }
+
+    async function sendToFormspree(form){
+      if(FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) return {ok:true, demo:true};
+      const data=new FormData(form);
+      try{
+        const res=await fetch(FORMSPREE_ENDPOINT,{method:"POST",body:data,headers:{Accept:"application/json"}});
+        return {ok:res.ok,demo:false};
+      }catch(e){return {ok:false,demo:false}};
+    }
+
+    async function submitOrder(e,items,isDirect){
+      e.preventDefault();
+      const form=e.target;
+      const result=await sendToFormspree(form);
+      if(!result.ok){showToast("Could not send the form. Check your Formspree ID.");return;}
+      const data=new FormData(form);
+      const order={
+        id:"VC-"+Date.now().toString().slice(-8),
+        createdAt:Date.now(),
+        productIds:items.map(x=>({id:x.id,qty:x.qty})),
+        customer:{name:data.get("name"),city:data.get("city"),phone:data.get("phone"),address:data.get("address")}
+      };
+      orders.unshift(order); cart=[]; save();
+      showOrderSuccess();
+    }
+
+    function showOrderSuccess(){
+      document.getElementById("checkoutContent").innerHTML=`
+        <div class="success-box">
+          <div class="success-tick">✓</div>
+          <div class="eyebrow">VIRAL / Order received</div>
+          <h2 class="serif" style="font-size:3rem;margin:15px 0">Order placed successfully</h2>
+          <p style="color:#777;line-height:1.7">Thank you. Your order has been saved to Orders History.</p>
+        </div>`;
+      setTimeout(()=>{closeView(); location.hash="#home"; renderHistory();},5000);
+    }
+
+    function statusFor(order){
+      const hours=(Date.now()-order.createdAt)/3600000;
+      const labels=["Your order delivered 6–7 days","5–6 days","4–5 days","3–4 days","2–3 days","1–2 days","Soon"];
+      const step=Math.floor(hours/24);
+      if(step>=labels.length) return null;
+      return {label:labels[step],step};
+    }
+
+    function renderHistory(){
+      const el=document.getElementById("historyContent");
+      // Remove orders that reached "Soon" and then remained for another 24 hours.
+      const before=orders.length;
+      orders=orders.filter(o=>((Date.now()-o.createdAt)/3600000)<(7*24));
+      if(before!==orders.length) save();
+      if(!orders.length){el.innerHTML=`<div class="empty">No orders yet.<br><br><a class="btn" href="#collection" onclick="closeView()">Shop the Collection</a></div>`;return;}
+      el.innerHTML=orders.map(o=>{
+        const s=statusFor(o); if(!s)return "";
+        const productsText=o.productIds.map(x=>`${getProduct(x.id).name} × ${x.qty}`).join(", ");
+        return `<div class="history-card">
+          <div class="history-top"><div><div class="eyebrow">${o.id}</div><h3 style="margin:8px 0">${productsText}</h3><div class="history-meta">${new Date(o.createdAt).toLocaleString()}</div></div><span class="status">${s.label}</span></div>
+          <div class="timeline">${[0,1,2,3,4,5,6].map(i=>`<i class="${i<=s.step?'active':''}"></i>`).join("")}</div>
+        </div>`;
+      }).join("");
+    }
+
+    function openHistory(e){
+      if(e)e.preventDefault();
+      renderHistory(); openView("historyView");
+    }
+
+    function goHome(){
+      closeView(); setTimeout(()=>location.hash="#home",20);
+    }
+
+    function toggleMobileMenu(){document.getElementById("mobileMenu").classList.toggle("hidden")}
+
+    function showToast(msg){
+      const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+      clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove("show"),2500);
+    }
+
+    document.querySelectorAll(".faq-q").forEach(q=>q.addEventListener("click",()=>q.parentElement.classList.toggle("open")));
+
+    document.getElementById("contactForm").addEventListener("submit",async e=>{
+      e.preventDefault();
+      const result=await sendToFormspree(e.target);
+      if(result.ok){e.target.reset();showToast(result.demo?"Contact form ready — add your Formspree ID first.":"Message sent successfully.");}
+      else showToast("Could not send the message. Check your Formspree ID.");
+    });
+
+    // Scroll reveal
+    const io=new IntersectionObserver(entries=>entries.forEach(x=>{if(x.isIntersecting)x.target.classList.add("reveal")}),{threshold:.12});
+    document.querySelectorAll(".product-card").forEach(x=>io.observe(x));
+
+    renderProducts(); updateCartCount(); renderHistory();
+    setInterval(()=>{renderHistory();},60*1000);
+
+    // 4.5 second opening animation
+    setTimeout(()=>document.getElementById("loader").classList.add("done"),4500);
+  </script>
+</body>
+</html>
